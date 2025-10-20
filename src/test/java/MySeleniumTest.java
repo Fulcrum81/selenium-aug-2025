@@ -1,3 +1,4 @@
+import com.codeborne.selenide.WebDriverRunner;
 import com.epam.reportportal.service.ReportPortal;
 import com.epam.reportportal.testng.ReportPortalTestNGListener;
 import io.qameta.allure.Description;
@@ -6,7 +7,13 @@ import io.qameta.allure.Feature;
 import listeners.ScreenshotListener;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.remote.Browser;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -17,8 +24,14 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static com.codeborne.selenide.Browsers.CHROME;
 
 @Epic("Initial Selenium training tests")
 @Feature("Super-duper feature under test")
@@ -28,8 +41,38 @@ public class MySeleniumTest {
     private WebDriver driver;
 
     @BeforeMethod
-    public void setup() {
-        driver = new ChromeDriver();
+    public void setup() throws MalformedURLException {
+        DesiredCapabilities caps = new DesiredCapabilities();
+        String browser = System.getProperty("browser", "chrome");
+        String os = System.getProperty("os", "win11");
+
+        switch (browser) {
+            case "chrome" -> caps.setBrowserName(Browser.CHROME.browserName());
+            case "safari" -> caps.setBrowserName(Browser.SAFARI.browserName());
+            case "firefox" -> caps.setBrowserName(Browser.FIREFOX.browserName());
+            case "edge" -> caps.setBrowserName(Browser.EDGE.browserName());
+        }
+
+        switch (os) {
+            case "win11" -> caps.setPlatform(Platform.WIN11);
+            case "win" -> caps.setPlatform(Platform.WINDOWS);
+            case "mac" -> caps.setPlatform(Platform.MAC);
+            case "linux" -> caps.setPlatform(Platform.LINUX);
+        }
+
+        Map<String, Object> sauceOptions = new HashMap<>();
+        sauceOptions.put("username", "oauth-vadim.zubovich-c3335");
+        sauceOptions.put("accessKey", "019c74f8-9b3c-45a5-9bba-16ffa5113415");
+        sauceOptions.put("build", "My stupid build 1.1.1");
+        sauceOptions.put("name", "Regression");
+        caps.setCapability("sauce:options", sauceOptions);
+
+// start the session
+        URL url = new URL("https://ondemand.eu-central-1.saucelabs.com:443/wd/hub");
+
+        driver = new RemoteWebDriver(url, caps);
+
+//        driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
         driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(5));
