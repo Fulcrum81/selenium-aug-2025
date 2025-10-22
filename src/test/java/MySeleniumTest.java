@@ -60,17 +60,17 @@ public class MySeleniumTest {
             case "linux" -> caps.setPlatform(Platform.LINUX);
         }
 
-        Map<String, Object> sauceOptions = new HashMap<>();
-        sauceOptions.put("username", "oauth-vadim.zubovich-c3335");
-        sauceOptions.put("accessKey", "019c74f8-9b3c-45a5-9bba-16ffa5113415");
-        sauceOptions.put("build", "My stupid build 1.1.1");
-        sauceOptions.put("name", "Regression");
-        caps.setCapability("sauce:options", sauceOptions);
+//        Map<String, Object> sauceOptions = new HashMap<>();
+//        sauceOptions.put("username", "oauth-vadim.zubovich-c3335");
+//        sauceOptions.put("accessKey", "019c74f8-9b3c-45a5-9bba-16ffa5113415");
+//        sauceOptions.put("build", "My stupid build 1.1.1");
+//        sauceOptions.put("name", "Regression");
+//        caps.setCapability("sauce:options", sauceOptions);
 
 // start the session
-        URL url = new URL("https://ondemand.eu-central-1.saucelabs.com:443/wd/hub");
+//        URL url = new URL("https://ondemand.eu-central-1.saucelabs.com:443/wd/hub");
 
-        driver = new RemoteWebDriver(url, caps);
+        driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), caps);
 
 //        driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
@@ -167,7 +167,7 @@ public class MySeleniumTest {
         Actions actions = new Actions(driver);
 
         actions.clickAndHold(ball).moveByOffset(100, 0).moveByOffset(0, -100)
-                .moveByOffset(-100, 0).moveByOffset(0, 100).release().perform();
+                .moveByOffset(-100, 0).moveByOffset(0, 100).moveToElement(goal).release().perform();
 
         String goalBackgroundColor = goal.getCssValue("background-color");
 
