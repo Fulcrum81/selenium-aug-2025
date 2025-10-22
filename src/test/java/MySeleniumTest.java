@@ -114,14 +114,7 @@ public class MySeleniumTest {
     @Description("This is a stupid Xpath test that fails all the time")
     @Test(description = "Xpath test")
     public void xpathTest() {
-        WebDriver driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(5));
-        driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(5));
-
         driver.get("https://belhard.academy/");
-
-
 
         WebElement detailsLinkParent = driver.findElement(By.xpath("//div[contains(@id,'cardbtn1')]"));
         List<WebElement> detailsLinks = detailsLinkParent.findElements(By.xpath(".//span[@class='t-btntext__text']"));
@@ -132,12 +125,6 @@ public class MySeleniumTest {
     @Description("Test that utilizes the dblClick functionality of the Actions class")
     @Test(description = "Actions test")
     public void actionsTest() {
-        WebDriver driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
-        driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(5));
-        driver.manage().window().maximize();
-
         driver.get("https://demo.guru99.com/test/simple_context_menu.html");
 
         WebElement doubleClickButton = driver.findElement(By.cssSelector("button[ondblclick]"));
@@ -151,14 +138,6 @@ public class MySeleniumTest {
     @Description("Validate that the goal changes color after the ball is dragged into it")
     @Test(description = "Drag&Drop")
     public void dragAndDrop() {
-        WebDriver driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
-        driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(5));
-        driver.manage().window().maximize();
-        String pageTitle = driver.getTitle();
-
-
         driver.get("https://learn.javascript.ru/article/mouse-drag-and-drop/ball4/");
 
         WebElement ball = driver.findElement(By.id("ball"));
