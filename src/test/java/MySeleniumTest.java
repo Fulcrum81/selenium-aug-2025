@@ -73,9 +73,9 @@ public class MySeleniumTest {
         driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), caps);
 
 //        driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
-        driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(5));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+        driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(10));
 
         driver.manage().window().maximize();
     }
