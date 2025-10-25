@@ -2,8 +2,11 @@ package staticPO;
 
 import com.codeborne.selenide.AssertionMode;
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.testng.SoftAsserts;
+import com.epam.reportportal.service.ReportPortal;
+import com.epam.reportportal.testng.ReportPortalTestNGListener;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
 import listeners.ScreenshotListener;
@@ -19,6 +22,7 @@ import org.testng.annotations.Test;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Calendar;
 
 import static com.codeborne.selenide.Browsers.CHROME;
 import static com.codeborne.selenide.Condition.text;
@@ -26,7 +30,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
 
-@Listeners({ SoftAsserts.class, ScreenshotListener.class })
+@Listeners({ SoftAsserts.class, ScreenshotListener.class, ReportPortalTestNGListener.class })
 public class StaticLoginTest {
 
     @BeforeMethod
@@ -42,9 +46,12 @@ public class StaticLoginTest {
     @AfterMethod
     public void teardown(ITestResult result) {
         if (result.getStatus() == ITestResult.FAILURE) {
-            File screenshot = ((TakesScreenshot) WebDriverRunner.getWebDriver()).getScreenshotAs(OutputType.FILE);
+            File screenshot = Selenide.screenshot(OutputType.FILE);
             try {
-                Allure.addAttachment(result.getMethod().getMethodName() + " screenshot", new FileInputStream(screenshot));
+                Allure.addAttachment(result.getMethod().getMethodName() + " screenshot",
+                        new FileInputStream(screenshot));
+                ReportPortal.emitLog(result.getMethod().getMethodName() + " screenshot", "ERROR",
+                        Calendar.getInstance().getTime(), screenshot);
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
@@ -60,7 +67,7 @@ public class StaticLoginTest {
 
         Configuration.assertionMode = AssertionMode.SOFT;
         LoginResultPage.getErrorMessage().shouldBe(visible)
-                .shouldHave(text("Wrong password or the account is disabled, or does not exist"));
+                .shouldHave(text("Wrong password or the account is disabled, or does not exist111"));
     }
 
 }

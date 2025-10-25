@@ -9,7 +9,7 @@ public class LoginPage {
 
     private static By loginInput = By.name("email");
     private static By passwordInput = By.name("password");
-    private static By loginButton = By.name("login213");
+    private static By loginButton = By.name("login");
 
     @Step("Enter login")
     public static void enterLogin(String username) {
